@@ -378,19 +378,29 @@ function shuffleDeckData() {
 }
 
 // =====================================================
+// =====================================================
 // การแสดงผลสำรับการ์ดบนตาราง (Grid)
 // =====================================================
+const paperStyles = ['paper-kraft', 'paper-grid', 'paper-lined', 'paper-white'];
+const fasteners = ['fastener-tape', 'fastener-pin', 'fastener-clip'];
+
 function renderCardGrid() {
     cardGrid.innerHTML = '';
     activeDeck.forEach((card, index) => {
         const cardElement = document.createElement('div');
-        cardElement.className = 'grid-card';
+        
+        // กำหนดลวดลายกระดาษและตัวยึดตามลำดับสลับกันอย่างสวยงาม
+        const paperClass = paperStyles[index % paperStyles.length];
+        const fastenerClass = fasteners[index % fasteners.length];
+        
+        cardElement.className = `grid-card ${paperClass}`;
         cardElement.setAttribute('role', 'button');
         cardElement.setAttribute('tabindex', '0');
         cardElement.setAttribute('aria-label', `เปิดซองจดหมายธีม ${card.envelopeLabel}`);
         cardElement.dataset.index = index;
 
         cardElement.innerHTML = `
+            <div class="${fastenerClass} fastener" aria-hidden="true"></div>
             <div class="grid-card-emoji" aria-hidden="true">${card.envelopeEmoji}</div>
             <div class="grid-card-label">${card.envelopeLabel}</div>
             <div class="grid-card-hint">แตะเพื่อเปิด 💌</div>
@@ -429,14 +439,18 @@ function openModal(index) {
         .map(e => `<span aria-hidden="true">${e}</span>`)
         .join('');
 
-    // ตั้งค่าพื้นหลังและการปรับแต่งของฟอร์มจดหมายรัก
-    modalCardBack.style.background = card.bgColor || '';
+    // ตั้งค่าลวดลายกระดาษด้านในให้ตรงกับการ์ดที่กดเลือก
+    const paperClass = paperStyles[index % paperStyles.length];
+    modalCardBack.className = 'modal-card-back';
+    modalCardBack.classList.add(paperClass);
+
+    // ปรับแต่งสีหัวข้อตามการ์ด
     if (card.accentColor) {
         elModalCardTitle.style.color = card.accentColor;
         elModalEnvelopeLabel.style.color = card.accentColor;
     } else {
-        elModalCardTitle.style.color = '';
-        elModalEnvelopeLabel.style.color = '';
+        elModalCardTitle.style.color = 'var(--text-cocoa)';
+        elModalEnvelopeLabel.style.color = 'var(--text-cocoa)';
     }
 
     // 2. เคลียร์สถานะการพลิกเดิม
@@ -514,15 +528,15 @@ function shuffleDeck() {
 }
 
 // =====================================================
-// เอฟเฟกต์: ฟองสบู่สะท้อนแสงและหัวใจพาสเทลลอยพื้นหลัง (Ambient)
+// เอฟเฟกต์: ฟองสบู่สะท้อนแสงและหัวใจพาสเทลลอยพื้นหลัง (คุมปริมาณเพื่อไม่ให้เครื่องแล็ก)
 // =====================================================
 function createAmbientParticles() {
-    // 1. สร้างฟองสบู่พาสเทล 6 ลูก
-    for (let i = 0; i < 6; i++) {
+    // 1. สร้างฟองสบู่พาสเทล 4 ลูก (ลดจำนวนจาก 6 ลูก)
+    for (let i = 0; i < 4; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'floating-bubble';
         bubble.setAttribute('aria-hidden', 'true');
-        const size = Math.random() * 24 + 12; // 12px ถึง 36px
+        const size = Math.random() * 20 + 12; // 12px ถึง 32px
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         bubble.style.left = Math.random() * 100 + '%';
@@ -531,8 +545,8 @@ function createAmbientParticles() {
         bgHearts.appendChild(bubble);
     }
 
-    // 2. สร้างหัวใจมินิมอล 6 ดวง
-    for (let i = 0; i < 6; i++) {
+    // 2. สร้างหัวใจมินิมอล 4 ดวง (ลดจำนวนจาก 6 ดวง)
+    for (let i = 0; i < 4; i++) {
         const heart = document.createElement('div');
         heart.className = 'floating-heart';
         heart.setAttribute('aria-hidden', 'true');
@@ -575,10 +589,10 @@ function createSparkles() {
 }
 
 // =====================================================
-// เอฟเฟกต์: ฟองสบู่และหัวใจลอยพุ่งขึ้นมาจากขอบการ์ดเมื่อเปิดเผย (Reveal Particles)
+// เอฟเฟกต์: ฟองสบู่และหัวใจลอยพุ่งขึ้นมาจากขอบการ์ดเมื่อเปิดเผย (GPU-Accelerated)
 // =====================================================
 function createConfettiHearts() {
-    const count = 12;
+    const count = 8; // ลดจาก 12
     const rect = modalCard.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2 + window.scrollX;
     const centerY = rect.top + rect.height / 2 + window.scrollY;
@@ -589,50 +603,49 @@ function createConfettiHearts() {
         bubble.className = 'floating-bubble';
         bubble.setAttribute('aria-hidden', 'true');
         
-        const size = Math.random() * 18 + 10; // 10px ถึง 28px
+        const size = Math.random() * 16 + 10;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
-        // สุ่มตำแหน่งกระจายรอบๆ การ์ด
-        bubble.style.left = (centerX + (Math.random() * 160 - 80)) + 'px';
-        bubble.style.top = (centerY + (Math.random() * 200 - 100)) + 'px';
+        bubble.style.left = (centerX + (Math.random() * 140 - 70)) + 'px';
+        bubble.style.top = (centerY + (Math.random() * 160 - 80)) + 'px';
         
-        bubble.style.animation = 'bubbleReveal 2s ease-out forwards';
+        bubble.style.animation = 'bubbleReveal 1.8s ease-out forwards';
         document.body.appendChild(bubble);
 
-        setTimeout(() => bubble.remove(), 2000);
+        setTimeout(() => bubble.remove(), 1800);
     }
 
     // 2. หัวใจลอยพุ่งขึ้น
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 5; i++) { // ลดจาก 8
         const heart = document.createElement('div');
         heart.className = 'floating-heart';
         heart.setAttribute('aria-hidden', 'true');
         
-        heart.style.left = (centerX + (Math.random() * 160 - 80)) + 'px';
-        heart.style.top = (centerY + (Math.random() * 200 - 100)) + 'px';
+        heart.style.left = (centerX + (Math.random() * 140 - 70)) + 'px';
+        heart.style.top = (centerY + (Math.random() * 160 - 80)) + 'px';
         
-        heart.style.animation = 'heartReveal 2s ease-out forwards';
+        heart.style.animation = 'heartReveal 1.8s ease-out forwards';
         document.body.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 2000);
+        setTimeout(() => heart.remove(), 1800);
     }
 }
 
 // =====================================================
-// แทรกแอนิเมชันเฉพาะกิจใน JS (Self-contained Keyframes)
+// แทรกแอนิเมชัน GPU-Accelerated (translate3d) ใน JS
 // =====================================================
 const revealStyles = document.createElement('style');
 revealStyles.innerHTML = `
     @keyframes bubbleReveal {
-        0% { opacity: 0; transform: scale(0.5) translateY(40px); }
+        0% { opacity: 0; transform: translate3d(0, 40px, 0) scale(0.5); }
         25% { opacity: 0.85; }
-        100% { opacity: 0; transform: scale(1.2) translateY(-140px) translateX(15px); }
+        100% { opacity: 0; transform: translate3d(15px, -140px, 0) scale(1.2); }
     }
     @keyframes heartReveal {
-        0% { opacity: 0; transform: scale(0.5) rotate(-45deg) translateY(40px); }
+        0% { opacity: 0; transform: translate3d(0, 40px, 0) scale(0.5) rotate(-45deg); }
         25% { opacity: 0.85; }
-        100% { opacity: 0; transform: scale(1.1) rotate(45deg) translateY(-140px) translateX(-15px); }
+        100% { opacity: 0; transform: translate3d(-15px, -140px, 0) scale(1.1) rotate(45deg); }
     }
 `;
 document.head.appendChild(revealStyles);
