@@ -707,6 +707,40 @@ body::before {
     line-height: 1;
 }
 
+/* Rounded, dashed share button */
+.modal-card-back .btn-share-card {
+    margin-top: 0.6rem;
+    padding: 0.45rem 1.1rem;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-cocoa);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px dashed var(--pink-soft);
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(74, 51, 37, 0.02);
+    transition: var(--transition-cute);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    z-index: 15;
+}
+
+.modal-card-back .btn-share-card:hover {
+    transform: scale(1.05);
+    background: var(--pink-milk);
+    border-color: var(--pink-hot);
+    box-shadow: 0 6px 14px rgba(255, 117, 143, 0.15);
+}
+
+.modal-card-back .btn-share-card:active {
+    transform: scale(0.96);
+}
+
 /* Rounded Close Button */
 .btn-close {
     position: fixed;

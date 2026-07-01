@@ -337,6 +337,11 @@ const cardCollection = [
     }
 ];
 
+// กำหนด ID ถาวรให้กับการ์ดแต่ละใบสำหรับการแชร์ส่งต่อ (Share Link)
+cardCollection.forEach((card, index) => {
+    card.originalId = index + 1;
+});
+
 // สำเนาของกองการ์ดสำหรับสลับลำดับ
 let activeDeck = [...cardCollection];
 
@@ -354,6 +359,7 @@ const sparkleBox = document.getElementById('sparkleContainer');
 const modalCard = document.getElementById('modalCard');
 const modalWaxSeal = document.getElementById('modalWaxSeal');
 const modalCardBack = document.getElementById('modalCardBack');
+const btnShareCard = document.getElementById('btnShareCard');
 
 // Modal Contents
 const elModalEnvelopeLabel = document.getElementById('modalEnvelopeLabel');
@@ -366,6 +372,7 @@ const elModalCardEmojiBtm = document.getElementById('modalCardEmojiBottom');
 
 let isFlipped = false;       // สถานะการพลิกการ์ดใน Modal
 let isAnimating = false;    // ล็อคเพื่อป้องกันคลิกซ้อน (Debounce)
+let activeCardId = null;    // เก็บ ID ของการ์ดที่กำลังเปิดอยู่เพื่อทำลิงก์แชร์
 
 // =====================================================
 // ฟังก์ชันสลับลำดับการ์ด (Fisher-Yates Shuffle)
@@ -403,7 +410,7 @@ function renderCardGrid() {
             <div class="${fastenerClass} fastener" aria-hidden="true"></div>
             <div class="grid-card-emoji" aria-hidden="true">${card.envelopeEmoji}</div>
             <div class="grid-card-label">${card.envelopeLabel}</div>
-            <div class="grid-card-hint">แตะเพื่อเปิด 💌</div>
+            <div class="grid-card-hint">และส่งต่อเลย &gt;</div>
         `;
 
         // Event listener สำหรับการเปิดดูการ์ด
@@ -427,6 +434,7 @@ function openModal(index) {
     isAnimating = true;
 
     const card = activeDeck[index];
+    activeCardId = card.originalId; // บันทึก ID ของการ์ดใบที่เปิด
 
     // 1. อัปเดตข้อมูลการ์ดลงในฟอร์ม Modal
     elModalEnvelopeLabel.textContent = card.envelopeLabel;
@@ -438,6 +446,12 @@ function openModal(index) {
     elModalCardEmojiBtm.innerHTML = card.emojiBottom
         .map(e => `<span aria-hidden="true">${e}</span>`)
         .join('');
+
+    // รีเซ็ตข้อความปุ่มแชร์ส่งต่อเป็นค่าตั้งต้น
+    const shareTextEl = btnShareCard.querySelector('.share-btn-text');
+    if (shareTextEl) {
+        shareTextEl.textContent = 'คัดลอกลิงก์เพื่อส่งต่อการ์ดนี้ 🔗';
+    }
 
     // ตั้งค่าลวดลายกระดาษด้านในให้ตรงกับการ์ดที่กดเลือก
     const paperClass = paperStyles[index % paperStyles.length];
@@ -651,6 +665,46 @@ revealStyles.innerHTML = `
 document.head.appendChild(revealStyles);
 
 // =====================================================
+// ฟังก์ชันคัดลอกลิงก์แชร์การ์ดความรัก (Share Link)
+// =====================================================
+function handleShareClick() {
+    if (!activeCardId) return;
+    
+    // สร้าง URL ที่ระบุ ID ของการ์ดใบนี้
+    const shareUrl = `${window.location.origin}${window.location.pathname}?card=${activeCardId}`;
+    
+    // บันทึกลิงก์เข้าสู่คลิปบอร์ด
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        const shareTextEl = btnShareCard.querySelector('.share-btn-text');
+        if (shareTextEl) {
+            shareTextEl.textContent = 'คัดลอกสำเร็จ! 💕';
+        }
+    }).catch(err => {
+        console.error('Failed to copy share link: ', err);
+        // แสดงทางเลือกหากคัดลอกไม่ได้
+        alert(`คัดลอกลิงก์นี้เพื่อส่งให้เพื่อนได้เลยค่ะ:\n${shareUrl}`);
+    });
+}
+
+// ตรวจสอบพารามิเตอร์แชร์การ์ดใน URL เมื่อหน้าเว็บโหลดเสร็จ
+function checkSharedCard() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cardParam = urlParams.get('card');
+    if (cardParam) {
+        const targetId = parseInt(cardParam, 10);
+        
+        // ค้นหาตำแหน่งการ์ดใน Active Deck ที่มี ID ถาวรตรงกัน
+        const deckIndex = activeDeck.findIndex(c => c.originalId === targetId);
+        if (deckIndex !== -1) {
+            // ดีเลย์เล็กน้อยเพื่อให้ทรัพยากรหน้าเว็บพร้อมก่อนเปิดแสดง Modal
+            setTimeout(() => {
+                openModal(deckIndex);
+            }, 600);
+        }
+    }
+}
+
+// =====================================================
 // Event Listeners
 // =====================================================
 
@@ -673,6 +727,9 @@ modalCard.addEventListener('click', (e) => {
         flipCardReveal();
     }
 });
+
+// กดปุ่มคัดลอกลิงก์เพื่อส่งต่อ
+btnShareCard.addEventListener('click', handleShareClick);
 
 // ปิดหน้าต่างการ์ดผ่านปุ่ม Close
 btnCloseModal.addEventListener('click', closeModal);
@@ -699,3 +756,4 @@ btnShuffle.addEventListener('click', shuffleDeck);
 // =====================================================
 createAmbientParticles();
 renderCardGrid();
+checkSharedCard();

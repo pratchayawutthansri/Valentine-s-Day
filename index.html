@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="การ์ดวาเลนไทน์ออนไลน์ — เลือกเปิดการ์ดส่งมอบความรักให้คนพิเศษของคุณ 💕">
 
-    <!-- iOS Safari -->
+    <!-- Web App Capable (Clears console deprecation warning) -->
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#f48fb1">
 
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="💕 Happy Valentine's Day — เลือกเปิดการ์ดรัก">
-    <meta property="og:description" content="เลือกเปิดการ์ดรักจากสำรับ 12 แบบ มอบให้คนพิเศษ 💕">
+    <meta property="og:description" content="เลือกเปิดการ์ดรักจากสำรับ 20 แบบ มอบให้คนพิเศษ 💕">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="th_TH">
 
@@ -44,7 +45,7 @@
 
     <main class="card-container">
 
-        <!-- Grid สำหรับแสดงสำรับการ์ดทั้ง 12 ใบ -->
+        <!-- Grid สำหรับแสดงสำรับการ์ดทั้ง 20 ใบ -->
         <div class="card-grid" id="cardGrid">
             <!-- ดึงการ์ดออกมาแสดงผลจาก JavaScript -->
         </div>
@@ -110,6 +111,11 @@
                                 <span>💖</span>
                                 <span>🌸</span>
                             </div>
+
+                            <!-- ปุ่มคัดลอกลิงก์ส่งต่อการ์ดนี้ -->
+                            <button class="btn-share-card" id="btnShareCard" aria-label="คัดลอกลิงก์เพื่อส่งต่อการ์ดรักนี้">
+                                <span class="share-btn-text">คัดลอกลิงก์เพื่อส่งต่อการ์ดนี้ 🔗</span>
+                            </button>
                         </div>
                     </div>
 
