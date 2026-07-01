@@ -1,14 +1,13 @@
 /**
- * Valentine's Day Card — Interactive Card Shuffler
- * สุ่มเปิดการ์ดวาเลนไทน์ มอบให้คนพิเศษ 💕
+ * Valentine's Day Card — Interactive Card Deck Game
+ * เลือกเปิดการ์ดความรักจากสำรับ 12 แบบ 💕
  */
 
 // =====================================================
-// ข้อมูลการ์ดทั้ง 12 แบบ
+// ข้อมูลการ์ดทั้ง 12 แบบ (คงเดิมทุกประการ)
 // =====================================================
 const cardCollection = [
     {
-        // การ์ดที่ 1: คลาสสิก — กุหลาบแดง
         envelopeEmoji: '💌',
         envelopeLabel: 'For You',
         corners: ['🌸', '🌷', '🌷', '🌸'],
@@ -25,7 +24,6 @@ const cardCollection = [
         accentColor: ''
     },
     {
-        // การ์ดที่ 2: น่ารัก — หมีกอด
         envelopeEmoji: '🧸',
         envelopeLabel: 'Hug Me',
         corners: ['🎀', '💝', '💝', '🎀'],
@@ -42,7 +40,6 @@ const cardCollection = [
         accentColor: '#ff8f00'
     },
     {
-        // การ์ดที่ 3: หวานละมุน — ช็อกโกแลต
         envelopeEmoji: '🍫',
         envelopeLabel: 'Sweet Love',
         corners: ['🍬', '🍭', '🍭', '🍬'],
@@ -59,7 +56,6 @@ const cardCollection = [
         accentColor: '#6d4c41'
     },
     {
-        // การ์ดที่ 4: โรแมนติก — แสงดาว
         envelopeEmoji: '🌙',
         envelopeLabel: 'My Star',
         corners: ['⭐', '🌟', '🌟', '⭐'],
@@ -76,7 +72,6 @@ const cardCollection = [
         accentColor: '#3f51b5'
     },
     {
-        // การ์ดที่ 5: สดใส — ดอกทานตะวัน
         envelopeEmoji: '🌻',
         envelopeLabel: 'Sunshine',
         corners: ['☀️', '🌼', '🌼', '☀️'],
@@ -93,7 +88,6 @@ const cardCollection = [
         accentColor: '#f9a825'
     },
     {
-        // การ์ดที่ 6: อบอุ่น — กาแฟยามเช้า
         envelopeEmoji: '☕',
         envelopeLabel: 'My Cup',
         corners: ['🫖', '🧁', '🧁', '🫖'],
@@ -110,7 +104,6 @@ const cardCollection = [
         accentColor: '#bf360c'
     },
     {
-        // การ์ดที่ 7: ฝันหวาน — ผีเสื้อ
         envelopeEmoji: '🦋',
         envelopeLabel: 'Dream',
         corners: ['🌺', '🦋', '🦋', '🌺'],
@@ -120,14 +113,13 @@ const cardCollection = [
         message: 'ทุกครั้งที่เจอเธอ 🦋<br>' +
             'ผีเสื้อในท้อง<strong>ก็บินว่อนไปหมด</strong><br>' +
             'หัวใจเต้นแรง ใจสั่น<br>' +
-            '<strong>เพราะมีเธอทำให้ตื่นเต้น</strong> 💓',
+            '<strong>because of you ทำให้ตื่นเต้น</strong> 💓',
         signature: 'Yours Flutter 🦋',
         emojiBottom: ['🌺', '🦋', '🌺'],
         bgColor: 'linear-gradient(145deg, #f3e5f5 0%, #e1bee7 100%)',
         accentColor: '#9c27b0'
     },
     {
-        // การ์ดที่ 8: ใสซื่อ — กระต่ายน้อย
         envelopeEmoji: '🐰',
         envelopeLabel: 'Bunny',
         corners: ['🥕', '🐾', '🐾', '🥕'],
@@ -144,7 +136,6 @@ const cardCollection = [
         accentColor: '#ec407a'
     },
     {
-        // การ์ดที่ 9: มินิมอล — หัวใจเรียบง่าย
         envelopeEmoji: '❤️',
         envelopeLabel: 'Love',
         corners: ['♥', '♥', '♥', '♥'],
@@ -161,7 +152,6 @@ const cardCollection = [
         accentColor: '#c62828'
     },
     {
-        // การ์ดที่ 10: สดใส — สายรุ้ง
         envelopeEmoji: '🌈',
         envelopeLabel: 'Rainbow',
         corners: ['🎨', '🎈', '🎈', '🎨'],
@@ -178,7 +168,6 @@ const cardCollection = [
         accentColor: '#2e7d32'
     },
     {
-        // การ์ดที่ 11: เทพนิยาย — เจ้าหญิง
         envelopeEmoji: '👑',
         envelopeLabel: 'My Queen',
         corners: ['💎', '👑', '👑', '💎'],
@@ -195,7 +184,6 @@ const cardCollection = [
         accentColor: '#ff8f00'
     },
     {
-        // การ์ดที่ 12: ซุกซน — น่ารักแกล้ง
         envelopeEmoji: '😜',
         envelopeLabel: 'Hey You!',
         corners: ['🎉', '🎊', '🎊', '🎉'],
@@ -210,281 +198,491 @@ const cardCollection = [
         emojiBottom: ['🎉', '😘', '🎉'],
         bgColor: 'linear-gradient(145deg, #fce4ec 0%, #f8bbd0 100%)',
         accentColor: '#d81b60'
+    },
+    {
+        // การ์ดที่ 13: แมวเหมียวขี้อ้อน
+        envelopeEmoji: '🐱',
+        envelopeLabel: 'My Kitty',
+        corners: ['🐾', '🐱', '🐱', '🐾'],
+        emojiTop: '🐱',
+        title: 'Purr-fect Together!',
+        divider: '🐾',
+        message: 'เธอเหมือนลูกแมวขี้อ้อน 🐱<br>' +
+            'ชอบมาคลอเคลียให้ใจสั่น<br>' +
+            'อยู่ด้วยกันแล้ว<strong>มีความสุขที่สุด</strong><br>' +
+            'ขออ้อนเธอแบบนี้<strong>ไปนานๆ นะ</strong> 💕',
+        signature: 'Your Kitty 🐾',
+        emojiBottom: ['🐾', '🐱', '🐾'],
+        bgColor: 'linear-gradient(145deg, #fff3e0 0%, #ffe0b2 100%)',
+        accentColor: '#e65100'
+    },
+    {
+        // การ์ดที่ 14: คำอธิษฐานดวงดาว
+        envelopeEmoji: '🌠',
+        envelopeLabel: 'Make a Wish',
+        corners: ['✨', '🌠', '🌠', '✨'],
+        emojiTop: '🌠',
+        title: 'My Wish Come True',
+        divider: '✨',
+        message: 'เมื่อก่อนเวลาเห็นดาวตก 🌠<br>' +
+            'ฉันจะชอบ<strong>อธิษฐานขอพร</strong><br>' +
+            'แต่ตอนนี้ไม่ต้องขออะไรแล้ว<br>' +
+            'เพราะ<strong>ฉันมีเธออยู่ข้างๆ แล้ว</strong> 🥰',
+        signature: 'Your Dreamer 🌠',
+        emojiBottom: ['✨', '🌠', '✨'],
+        bgColor: 'linear-gradient(145deg, #f3e5f5 0%, #e1bee7 100%)',
+        accentColor: '#7b1fa2'
+    },
+    {
+        // การ์ดที่ 15: เสียงเพลงแทนใจ
+        envelopeEmoji: '🎵',
+        envelopeLabel: 'My Melody',
+        corners: ['🎶', '🎵', '🎵', '🎶'],
+        emojiTop: '🎧',
+        title: 'My Favorite Song',
+        divider: '🎵',
+        message: 'เหมือนมีเสียงเพลงในหัวใจ 🎶<br>' +
+            'ทุกครั้งที่<strong>คิดถึงใบหน้าเธอ</strong><br>' +
+            'เธอคือทำนองเพลงโปรดที่ฉัน<br>' +
+            '<strong>อยากฟังซ้ำๆ ทุกวันไม่มีเบื่อ</strong> 🎧',
+        signature: 'Your Melody 🎶',
+        emojiBottom: ['🎶', '🎵', '🎶'],
+        bgColor: 'linear-gradient(145deg, #e0f2f1 0%, #b2dfdb 100%)',
+        accentColor: '#004d40'
+    },
+    {
+        // การ์ดที่ 16: น้ำผึ้งแสนหวาน
+        envelopeEmoji: '🍯',
+        envelopeLabel: 'Honey Bee',
+        corners: ['🐝', '🌻', '🌻', '🐝'],
+        emojiTop: '🐝',
+        title: 'Bee Mine!',
+        divider: '🍯',
+        message: 'เธอหวานเหมือนน้ำผึ้ง 🍯<br>' +
+            'ทำตัวติดกันเหมือน<strong>ผึ้งตอมดอกไม้</strong><br>' +
+            'ขอบคุณที่เข้ามาเติมความหวาน<br>' +
+            'ให้โลกใบนี้<strong>น่าอยู่ขึ้นเยอะเลย</strong> 🐝',
+        signature: 'Your Honey 🍯',
+        emojiBottom: ['🐝', '🍯', '🐝'],
+        bgColor: 'linear-gradient(145deg, #fffde7 0%, #fff9c4 100%)',
+        accentColor: '#f57f17'
+    },
+    {
+        // การ์ดที่ 17: หมาน้อยแสนซน
+        envelopeEmoji: '🐶',
+        envelopeLabel: 'Puppy Love',
+        corners: ['🐾', '🐶', '🐶', '🐾'],
+        emojiTop: '🐶',
+        title: 'Crazy About You!',
+        divider: '🐾',
+        message: 'เธอรู้มั้ย... ฉันเหมือนลูกหมาตัวนึง 🐶<br>' +
+            'ที่เห็นเธอทีไร<strong>ก็หางกระดิกดึ๋งๆ</strong><br>' +
+            'ดีใจทุกครั้งที่ได้เจอหน้าเธอ<br>' +
+            '<strong>รักและซื่อสัตย์กับเธอที่สุดนะ</strong> 🥰',
+        signature: 'Your Puppy 🐾',
+        emojiBottom: ['🐾', '🐶', '🐾'],
+        bgColor: 'linear-gradient(145deg, #efebe9 0%, #d7ccc8 100%)',
+        accentColor: '#5d4037'
+    },
+    {
+        // การ์ดที่ 18: ผ้าห่มอุ่นๆ ยามหนาว
+        envelopeEmoji: '☁️',
+        envelopeLabel: 'Cozy Warmth',
+        corners: ['❄️', '☁️', '☁️', '❄️'],
+        emojiTop: '🛌',
+        title: 'My Cozy Escape',
+        divider: '☁️',
+        message: 'เธอเหมือนผ้าห่มอุ่นๆ ☁️<br>' +
+            'ในค่ำคืนที่<strong>หนาวเย็นและเหนื่อยล้า</strong><br>' +
+            'ขอแค่ได้ซุกกอดอุ่นๆ จากเธอ<br>' +
+            '<strong>ก็หายเหนื่อยเป็นปลิดทิ้งแล้ว</strong> 🧸',
+        signature: 'Your Blanket ☁️',
+        emojiBottom: ['❄️', '☁️', '❄️'],
+        bgColor: 'linear-gradient(145deg, #e1f5fe 0%, #b3e5fc 100%)',
+        accentColor: '#0288d1'
+    },
+    {
+        // การ์ดที่ 19: เชอร์รี่คู่รัก
+        envelopeEmoji: '🍒',
+        envelopeLabel: 'Cherry Pair',
+        corners: ['🌱', '🍒', '🍒', '🌱'],
+        emojiTop: '🍒',
+        title: 'We\'re a Perfect Pair!',
+        divider: '🍒',
+        message: 'เราเกิดมาคู่กันเหมือนเชอร์รี่ 🍒<br>' +
+            'ที่ต้องอยู่เป็นกิ่งคู่<strong>ไม่เคยห่างกัน</strong><br>' +
+            'ขาดเธอไปฉันก็เหงาแย่เลย<br>' +
+            '<strong>มาตัวติดกันแบบนี้ตลอดไปนะ</strong> 💕',
+        signature: 'Your Cherry 🍒',
+        emojiBottom: ['🌱', '🍒', '🌱'],
+        bgColor: 'linear-gradient(145deg, #ffebee 0%, #ffcdd2 100%)',
+        accentColor: '#d32f2f'
+    },
+    {
+        // การ์ดที่ 20: คุกกี้เสี่ยงทายโชคดี
+        envelopeEmoji: '🥠',
+        envelopeLabel: 'Lucky Charm',
+        corners: ['🍀', '🥠', '🥠', '🍀'],
+        emojiTop: '🍀',
+        title: 'Lucky To Have You!',
+        divider: '🥠',
+        message: 'ฉันต้องทำบุญด้วยอะไรมานะ 🍀<br>' +
+            'ถึงได้มีแฟน<strong>น่ารักและแสนดีขนาดนี้</strong><br>' +
+            'เธอคือความโชคดีที่สุดในชีวิต<br>' +
+            '<strong>ขอบคุณที่เข้ามาในโลกของฉันนะ</strong> 🥰',
+        signature: 'Your Lucky Charm 🍀',
+        emojiBottom: ['🍀', '🥠', '🍀'],
+        bgColor: 'linear-gradient(145deg, #fff9c4 0%, #fff59d 100%)',
+        accentColor: '#fbc02d'
     }
 ];
+
+// สำเนาของกองการ์ดสำหรับสลับลำดับ
+let activeDeck = [...cardCollection];
 
 // =====================================================
 // DOM Elements
 // =====================================================
-const envelope = document.getElementById('envelope');
-const envelopeWrapper = document.getElementById('envelopeWrapper');
-const envelopeBack = document.getElementById('envelopeBack');
-const btnToggle = document.getElementById('btnToggle');
+const cardGrid = document.getElementById('cardGrid');
+const cardModal = document.getElementById('cardModal');
+const btnCloseModal = document.getElementById('btnCloseModal');
 const btnShuffle = document.getElementById('btnShuffle');
 const bgHearts = document.getElementById('bgHearts');
 const sparkleBox = document.getElementById('sparkleContainer');
-const counterText = document.getElementById('counterText');
 
-// DOM — ส่วนที่จะอัปเดตตามการ์ด
-const elEnvelopeEmoji = document.getElementById('envelopeEmoji');
-const elEnvelopeLabel = document.getElementById('envelopeLabel');
-const elCornerTL = document.getElementById('cornerTL');
-const elCornerTR = document.getElementById('cornerTR');
-const elCornerBL = document.getElementById('cornerBL');
-const elCornerBR = document.getElementById('cornerBR');
-const elCardEmojiTop = document.getElementById('cardEmojiTop');
-const elCardTitle = document.getElementById('cardTitle');
-const elCardDivider = document.getElementById('cardDivider');
-const elCardMessage = document.getElementById('cardMessage');
-const elCardSignature = document.getElementById('cardSignature');
-const elCardEmojiBtm = document.getElementById('cardEmojiBottom');
+// Modal Elements
+const modalCard = document.getElementById('modalCard');
+const modalWaxSeal = document.getElementById('modalWaxSeal');
+const modalCardBack = document.getElementById('modalCardBack');
 
-let isOpened = false;       // สถานะเปิด/ปิด
-let usedIndexes = [];       // เก็บลำดับที่สุ่มแล้ว (ไม่ซ้ำ)
-let isAnimating = false;    // ป้องกัน spam click (debounce)
+// Modal Contents
+const elModalEnvelopeLabel = document.getElementById('modalEnvelopeLabel');
+const elModalCardEmojiTop = document.getElementById('modalCardEmojiTop');
+const elModalCardTitle = document.getElementById('modalCardTitle');
+const elModalCardDivider = document.getElementById('modalCardDivider');
+const elModalCardMessage = document.getElementById('modalCardMessage');
+const elModalCardSignature = document.getElementById('modalCardSignature');
+const elModalCardEmojiBtm = document.getElementById('modalCardEmojiBottom');
+
+let isFlipped = false;       // สถานะการพลิกการ์ดใน Modal
+let isAnimating = false;    // ล็อคเพื่อป้องกันคลิกซ้อน (Debounce)
 
 // =====================================================
-// ฟังก์ชันสุ่มลำดับการ์ด (Fisher-Yates Shuffle)
+// ฟังก์ชันสลับลำดับการ์ด (Fisher-Yates Shuffle)
 // =====================================================
-function generateShuffleOrder() {
-    const arr = [];
-    for (let i = 0; i < cardCollection.length; i++) {
-        arr.push(i);
-    }
-    for (let i = arr.length - 1; i > 0; i--) {
+function shuffleDeckData() {
+    for (let i = activeDeck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
     }
-    return arr;
-}
-
-// สุ่มการ์ดถัดไป
-function getNextCardIndex() {
-    if (usedIndexes.length === 0) {
-        usedIndexes = generateShuffleOrder();
-    }
-    return usedIndexes.pop();
 }
 
 // =====================================================
-// อัปเดตเนื้อหาการ์ดตาม index
+// การแสดงผลสำรับการ์ดบนตาราง (Grid)
 // =====================================================
-function applyCardData(index) {
-    const card = cardCollection[index];
+function renderCardGrid() {
+    cardGrid.innerHTML = '';
+    activeDeck.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'grid-card';
+        cardElement.setAttribute('role', 'button');
+        cardElement.setAttribute('tabindex', '0');
+        cardElement.setAttribute('aria-label', `เปิดซองจดหมายธีม ${card.envelopeLabel}`);
+        cardElement.dataset.index = index;
 
-    // --- ด้านหน้าซอง ---
-    elEnvelopeEmoji.textContent = card.envelopeEmoji;
-    elEnvelopeLabel.textContent = card.envelopeLabel;
-    elCornerTL.textContent = card.corners[0];
-    elCornerTR.textContent = card.corners[1];
-    elCornerBL.textContent = card.corners[2];
-    elCornerBR.textContent = card.corners[3];
+        cardElement.innerHTML = `
+            <div class="grid-card-emoji" aria-hidden="true">${card.envelopeEmoji}</div>
+            <div class="grid-card-label">${card.envelopeLabel}</div>
+            <div class="grid-card-hint">แตะเพื่อเปิด 💌</div>
+        `;
 
-    // --- ด้านในการ์ด ---
-    elCardEmojiTop.textContent = card.emojiTop;
-    elCardTitle.textContent = card.title;
-    elCardDivider.textContent = card.divider;
-    elCardMessage.innerHTML = card.message;
-    elCardSignature.textContent = card.signature;
+        // Event listener สำหรับการเปิดดูการ์ด
+        cardElement.addEventListener('click', () => openModal(index));
+        cardElement.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openModal(index);
+            }
+        });
 
-    // อีโมจิด้านล่าง
-    elCardEmojiBtm.innerHTML = card.emojiBottom
-        .map(function (e) { return '<span aria-hidden="true">' + e + '</span>'; })
+        cardGrid.appendChild(cardElement);
+    });
+}
+
+// =====================================================
+// โหมด Modal: เปิด/ปิดการ์ดความรัก
+// =====================================================
+function openModal(index) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const card = activeDeck[index];
+
+    // 1. อัปเดตข้อมูลการ์ดลงในฟอร์ม Modal
+    elModalEnvelopeLabel.textContent = card.envelopeLabel;
+    elModalCardEmojiTop.textContent = card.emojiTop;
+    elModalCardTitle.textContent = card.title;
+    elModalCardDivider.textContent = card.divider;
+    elModalCardMessage.innerHTML = card.message;
+    elModalCardSignature.textContent = card.signature;
+    elModalCardEmojiBtm.innerHTML = card.emojiBottom
+        .map(e => `<span aria-hidden="true">${e}</span>`)
         .join('');
 
-    // --- สีพื้นหลังการ์ด ---
-    envelopeBack.style.background = card.bgColor || '#ffffff';
-
-    // --- สีเน้น (accent) ---
+    // ตั้งค่าพื้นหลังและการปรับแต่งของฟอร์มจดหมายรัก
+    modalCardBack.style.background = card.bgColor || '';
     if (card.accentColor) {
-        elCardTitle.style.color = card.accentColor;
-        elEnvelopeLabel.style.color = card.accentColor;
+        elModalCardTitle.style.color = card.accentColor;
+        elModalEnvelopeLabel.style.color = card.accentColor;
     } else {
-        elCardTitle.style.color = '';
-        elEnvelopeLabel.style.color = '';
+        elModalCardTitle.style.color = '';
+        elModalEnvelopeLabel.style.color = '';
     }
 
-    // อัปเดตตัวนับ
-    counterText.textContent = 'การ์ด ' + (index + 1) + ' / ' + cardCollection.length;
+    // 2. เคลียร์สถานะการพลิกเดิม
+    isFlipped = false;
+    modalCard.classList.remove('flipped');
+    modalWaxSeal.classList.remove('cracked');
+
+    // 3. แสดง Modal ขึ้นมาแบบซูม
+    cardModal.classList.add('active');
+    cardModal.setAttribute('aria-hidden', 'false');
+    cardModal.focus();
+
+    setTimeout(() => {
+        isAnimating = false;
+    }, 500);
 }
 
-// =====================================================
-// เปิด/ปิดการ์ด
-// =====================================================
-function toggleCard() {
-    if (isAnimating) return; // ป้องกัน spam click
+function flipCardReveal() {
+    if (isAnimating || isFlipped) return;
+    isAnimating = true;
+    isFlipped = true;
 
-    isOpened = !isOpened;
+    // 1. สติกเกอร์กระโดดแตกตัวเลือนหาย
+    modalWaxSeal.classList.add('cracked');
 
-    if (isOpened) {
-        envelope.classList.add('opened');
-        btnToggle.querySelector('.btn-text').textContent = 'ปิดการ์ด';
-        btnToggle.querySelector('.btn-icon').textContent = '💝';
-        btnToggle.setAttribute('aria-label', 'ปิดการ์ด');
+    // 2. พลิกหมุนตัวการ์ดใน Z space 3D (Y-axis)
+    setTimeout(() => {
+        modalCard.classList.add('flipped');
 
-        // เอฟเฟกต์ประกายและหัวใจตกลงมา (debounced)
-        isAnimating = true;
-        setTimeout(function () {
+        // 3. ทริกเกอร์เอฟเฟกต์เฉลิมฉลองเมื่อหมุนมาเห็นข้อความด้านหลัง
+        setTimeout(() => {
             createSparkles();
             createConfettiHearts();
             isAnimating = false;
-        }, 400);
+        }, 300);
+    }, 250);
+}
 
-    } else {
-        envelope.classList.remove('opened');
-        btnToggle.querySelector('.btn-text').textContent = 'เปิดการ์ด';
-        btnToggle.querySelector('.btn-icon').textContent = '💌';
-        btnToggle.setAttribute('aria-label', 'เปิดการ์ด');
-    }
+function closeModal() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    cardModal.classList.remove('active');
+    cardModal.setAttribute('aria-hidden', 'true');
+
+    setTimeout(() => {
+        // รีเซ็ตการหมุนการ์ดหลังหน้าต่างปิดตัวลงแล้ว
+        modalCard.classList.remove('flipped');
+        modalWaxSeal.classList.remove('cracked');
+        isFlipped = false;
+        isAnimating = false;
+    }, 500);
 }
 
 // =====================================================
-// สุ่มการ์ดใหม่
+// การสับและแจกไพ่ใหม่ (Shuffle Animation)
 // =====================================================
-function shuffleCard() {
-    if (isAnimating) return; // ป้องกัน spam click
-
-    // ถ้าการ์ดเปิดอยู่ → ปิดก่อน
-    if (isOpened) {
-        isOpened = false;
-        envelope.classList.remove('opened');
-        btnToggle.querySelector('.btn-text').textContent = 'เปิดการ์ด';
-        btnToggle.querySelector('.btn-icon').textContent = '💌';
-        btnToggle.setAttribute('aria-label', 'เปิดการ์ด');
-    }
-
-    // Animation สั่น (shake)
+function shuffleDeck() {
+    if (isAnimating) return;
     isAnimating = true;
-    envelopeWrapper.classList.add('shake');
 
-    setTimeout(function () {
-        // สุ่มการ์ดใหม่
-        var nextIndex = getNextCardIndex();
-        applyCardData(nextIndex);
+    // ล้างและสับตำแหน่งข้อมูลการ์ด
+    shuffleDeckData();
 
-        // ลบ animation shake
-        envelopeWrapper.classList.remove('shake');
+    // เพิ่มเอฟเฟกต์อนิเมชันสับไพ่
+    cardGrid.classList.add('shuffling');
 
-        // เพิ่ม animation pop-in
-        envelopeWrapper.classList.add('pop-in');
-        setTimeout(function () {
-            envelopeWrapper.classList.remove('pop-in');
+    setTimeout(() => {
+        renderCardGrid();
+        setTimeout(() => {
+            cardGrid.classList.remove('shuffling');
             isAnimating = false;
         }, 500);
-
-    }, 400);
+    }, 300);
 }
 
 // =====================================================
-// เอฟเฟกต์: หัวใจพื้นหลังลอย
+// เอฟเฟกต์: ฟองสบู่สะท้อนแสงและหัวใจพาสเทลลอยพื้นหลัง (Ambient)
 // =====================================================
-function createBgHearts() {
-    var heartEmojis = ['❤️', '💕', '💖', '💗', '💓', '🩷', '🤍', '🩵'];
-    var count = 12; // ลดจาก 20 → 12 เพื่อ performance บนมือถือ
+function createAmbientParticles() {
+    // 1. สร้างฟองสบู่พาสเทล 6 ลูก
+    for (let i = 0; i < 6; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'floating-bubble';
+        bubble.setAttribute('aria-hidden', 'true');
+        const size = Math.random() * 24 + 12; // 12px ถึง 36px
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = Math.random() * 100 + '%';
+        bubble.style.animationDuration = (Math.random() * 12 + 10) + 's';
+        bubble.style.animationDelay = (Math.random() * 8) + 's';
+        bgHearts.appendChild(bubble);
+    }
 
-    for (var i = 0; i < count; i++) {
-        var heart = document.createElement('span');
-        heart.className = 'heart';
+    // 2. สร้างหัวใจมินิมอล 6 ดวง
+    for (let i = 0; i < 6; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
         heart.setAttribute('aria-hidden', 'true');
-        heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-
         heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 1.2 + 0.6) + 'rem';
-        heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
-        heart.style.animationDelay = (Math.random() * 10) + 's';
-
+        heart.style.animationDuration = (Math.random() * 10 + 8) + 's';
+        heart.style.animationDelay = (Math.random() * 8) + 's';
         bgHearts.appendChild(heart);
     }
 }
 
 // =====================================================
-// เอฟเฟกต์: ประกายกระจาย
+// เอฟเฟกต์: ประกายดาวสีพาสเทลพุ่งกระจาย (Sparkle Burst)
 // =====================================================
 function createSparkles() {
-    var sparkles = ['✨', '💫', '⭐', '🌟', '💖'];
-    var count = 12; // ลดจาก 15 → 12
+    const count = 12;
+    const rect = modalCard.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2 + window.scrollX;
+    const centerY = rect.top + rect.height / 2 + window.scrollY;
 
-    for (var i = 0; i < count; i++) {
-        var sparkle = document.createElement('span');
+    for (let i = 0; i < count; i++) {
+        const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
         sparkle.setAttribute('aria-hidden', 'true');
-        sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
-
-        var centerX = window.innerWidth / 2;
-        var centerY = window.innerHeight / 2;
 
         sparkle.style.left = centerX + 'px';
         sparkle.style.top = centerY + 'px';
 
-        var angle = (Math.PI * 2 / count) * i;
-        var dist = Math.random() * 200 + 100;
-        var tx = Math.cos(angle) * dist;
-        var ty = Math.sin(angle) * dist;
+        const angle = (Math.PI * 2 / count) * i;
+        const dist = Math.random() * 140 + 80;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
 
-        sparkle.style.setProperty('--tx', tx + 'px');
-        sparkle.style.setProperty('--ty', ty + 'px');
+        sparkle.style.setProperty('--tx', `${tx}px`);
+        sparkle.style.setProperty('--ty', `${ty}px`);
 
         sparkleBox.appendChild(sparkle);
 
-        setTimeout(function (el) { el.remove(); }, 1500, sparkle);
+        setTimeout(() => sparkle.remove(), 1400);
     }
 }
 
 // =====================================================
-// เอฟเฟกต์: หัวใจ confetti ตกลงมา
+// เอฟเฟกต์: ฟองสบู่และหัวใจลอยพุ่งขึ้นมาจากขอบการ์ดเมื่อเปิดเผย (Reveal Particles)
 // =====================================================
 function createConfettiHearts() {
-    var hearts = ['❤️', '💕', '💖', '💗', '🩷', '🤍', '💜', '🧡'];
-    var count = 20; // ลดจาก 25 → 20
+    const count = 12;
+    const rect = modalCard.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2 + window.scrollX;
+    const centerY = rect.top + rect.height / 2 + window.scrollY;
 
-    for (var i = 0; i < count; i++) {
-        var heart = document.createElement('span');
-        heart.className = 'confetti-heart';
+    // 1. ฟองสบู่พุ่งขึ้น
+    for (let i = 0; i < count; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'floating-bubble';
+        bubble.setAttribute('aria-hidden', 'true');
+        
+        const size = Math.random() * 18 + 10; // 10px ถึง 28px
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        // สุ่มตำแหน่งกระจายรอบๆ การ์ด
+        bubble.style.left = (centerX + (Math.random() * 160 - 80)) + 'px';
+        bubble.style.top = (centerY + (Math.random() * 200 - 100)) + 'px';
+        
+        bubble.style.animation = 'bubbleReveal 2s ease-out forwards';
+        document.body.appendChild(bubble);
+
+        setTimeout(() => bubble.remove(), 2000);
+    }
+
+    // 2. หัวใจลอยพุ่งขึ้น
+    for (let i = 0; i < 8; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
         heart.setAttribute('aria-hidden', 'true');
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
-        heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        heart.style.animationDelay = (Math.random() * 1) + 's';
-
+        
+        heart.style.left = (centerX + (Math.random() * 160 - 80)) + 'px';
+        heart.style.top = (centerY + (Math.random() * 200 - 100)) + 'px';
+        
+        heart.style.animation = 'heartReveal 2s ease-out forwards';
         document.body.appendChild(heart);
 
-        setTimeout(function (el) { el.remove(); }, 4000, heart);
+        setTimeout(() => heart.remove(), 2000);
     }
 }
+
+// =====================================================
+// แทรกแอนิเมชันเฉพาะกิจใน JS (Self-contained Keyframes)
+// =====================================================
+const revealStyles = document.createElement('style');
+revealStyles.innerHTML = `
+    @keyframes bubbleReveal {
+        0% { opacity: 0; transform: scale(0.5) translateY(40px); }
+        25% { opacity: 0.85; }
+        100% { opacity: 0; transform: scale(1.2) translateY(-140px) translateX(15px); }
+    }
+    @keyframes heartReveal {
+        0% { opacity: 0; transform: scale(0.5) rotate(-45deg) translateY(40px); }
+        25% { opacity: 0.85; }
+        100% { opacity: 0; transform: scale(1.1) rotate(45deg) translateY(-140px) translateX(-15px); }
+    }
+`;
+document.head.appendChild(revealStyles);
 
 // =====================================================
 // Event Listeners
 // =====================================================
 
-// กดซองจดหมายเพื่อเปิด/ปิด
-envelopeWrapper.addEventListener('click', toggleCard);
-
-// กดปุ่มเปิด/ปิด (stopPropagation ป้องกัน bubble ถ้า layout เปลี่ยน)
-btnToggle.addEventListener('click', function (e) {
+// กดสติกเกอร์รูปหัวใจเพื่อพลิกเปิดข้อความ
+modalWaxSeal.addEventListener('click', (e) => {
     e.stopPropagation();
-    toggleCard();
+    flipCardReveal();
 });
 
-// กดปุ่มสุ่มการ์ดใหม่
-btnShuffle.addEventListener('click', function () {
-    shuffleCard();
-});
-
-// Keyboard support: กด Enter/Space บนซองจดหมาย
-envelopeWrapper.addEventListener('keydown', function (e) {
+modalWaxSeal.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        toggleCard();
+        flipCardReveal();
     }
 });
+
+// กดการ์ดด้านหน้าตรงอื่นก็ช่วยทริกเกอร์พลิกเปิดเช่นกัน
+modalCard.addEventListener('click', (e) => {
+    if (!isFlipped && !e.target.closest('.modal-card-back')) {
+        flipCardReveal();
+    }
+});
+
+// ปิดหน้าต่างการ์ดผ่านปุ่ม Close
+btnCloseModal.addEventListener('click', closeModal);
+
+// ปิดเมื่อแตะพื้นหลัง Overlay เบลอๆ ด้านนอกตัวการ์ด
+cardModal.addEventListener('click', (e) => {
+    if (e.target === cardModal) {
+        closeModal();
+    }
+});
+
+// ปิดด้วยปุ่ม Escape บนคีย์บอร์ด
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cardModal.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// สับไพ่
+btnShuffle.addEventListener('click', shuffleDeck);
 
 // =====================================================
 // Initialization
 // =====================================================
-createBgHearts();
-
-// สุ่มการ์ดแรกตอนโหลด
-var firstIndex = getNextCardIndex();
-applyCardData(firstIndex);
+createAmbientParticles();
+renderCardGrid();

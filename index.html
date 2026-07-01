@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="การ์ดวาเลนไทน์ออนไลน์ — สุ่มเปิดการ์ดมอบความรักให้คนพิเศษของคุณ 💕">
+    <meta name="description" content="การ์ดวาเลนไทน์ออนไลน์ — เลือกเปิดการ์ดส่งมอบความรักให้คนพิเศษของคุณ 💕">
 
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,22 +12,22 @@
     <meta name="theme-color" content="#f48fb1">
 
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="💕 Happy Valentine's Day — สุ่มเปิดการ์ดรัก">
-    <meta property="og:description" content="สุ่มเปิดการ์ดรัก มอบให้คนพิเศษ 💕 เลือกการ์ดน่ารัก 12 แบบ">
+    <meta property="og:title" content="💕 Happy Valentine's Day — เลือกเปิดการ์ดรัก">
+    <meta property="og:description" content="เลือกเปิดการ์ดรักจากสำรับ 12 แบบ มอบให้คนพิเศษ 💕">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="th_TH">
 
-    <title>💕 Happy Valentine's Day — สุ่มเปิดการ์ดรัก</title>
+    <title>💕 Happy Valentine's Day — เลือกเปิดการ์ดรัก</title>
 
     <!-- Favicon -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
 
-    <!-- Google Fonts (ลดเหลือเฉพาะ weights ที่ใช้จริง) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Nunito:ital,wght@0,200..900;1,200..900&family=Dancing+Script:wght@400;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
@@ -39,92 +39,88 @@
 
     <header class="page-header">
         <h1 lang="en">Happy Valentine's Day</h1>
-        <p class="subtitle">💕 สุ่มเปิดการ์ดรัก มอบให้คนพิเศษ 💕</p>
+        <p class="subtitle">💕 แตะเลือกการ์ดรักในสำรับ เพื่อเปิดอ่านข้อความพิเศษ 💕</p>
     </header>
 
     <main class="card-container">
 
-        <!-- ป้ายจำนวนการ์ด -->
-        <div class="card-counter" id="cardCounter">
-            <span class="counter-icon" aria-hidden="true">🎴</span>
-            <span class="counter-text" id="counterText">การ์ด 1 / 12</span>
+        <!-- Grid สำหรับแสดงสำรับการ์ดทั้ง 12 ใบ -->
+        <div class="card-grid" id="cardGrid">
+            <!-- ดึงการ์ดออกมาแสดงผลจาก JavaScript -->
         </div>
 
-        <div class="envelope-wrapper" id="envelopeWrapper" role="button" tabindex="0" aria-label="แตะเพื่อเปิดการ์ด">
-            <div class="envelope" id="envelope">
-
-                <!-- ===== ด้านหน้าซอง (Envelope Front) ===== -->
-                <div class="envelope-front" id="envelopeFront">
-
-                    <!-- ดอกไม้มุมซอง -->
-                    <span class="corner-decor top-left" id="cornerTL" aria-hidden="true">🌸</span>
-                    <span class="corner-decor top-right" id="cornerTR" aria-hidden="true">🌷</span>
-                    <span class="corner-decor bottom-left" id="cornerBL" aria-hidden="true">🌷</span>
-                    <span class="corner-decor bottom-right" id="cornerBR" aria-hidden="true">🌸</span>
-
-                    <!-- เนื้อหาซอง -->
-                    <div class="envelope-heart" id="envelopeEmoji" aria-hidden="true">💌</div>
-                    <p class="envelope-label" id="envelopeLabel" lang="en">For You</p>
-                    <p class="envelope-hint">แตะเพื่อเปิดการ์ด ✨</p>
-                </div>
-
-
-                <!-- ===== ด้านในการ์ด (Card Inside) ===== -->
-                <div class="envelope-back" id="envelopeBack">
-                    <div class="card-inner">
-
-                        <!-- อีโมจิด้านบน -->
-                        <div class="card-emoji-top" id="cardEmojiTop" aria-hidden="true">🌹</div>
-
-                        <!-- หัวข้อการ์ด -->
-                        <h2 class="card-title" id="cardTitle" lang="en">Happy Valentine's Day</h2>
-
-                        <!-- เส้นคั่น -->
-                        <div class="card-divider" id="cardDivider" aria-hidden="true">💗</div>
-
-                        <!-- ข้อความน่ารัก -->
-                        <p class="card-message" id="cardMessage">
-                            สุขสันต์วันวาเลนไทน์นะ 🥰<br>
-                            ขอให้วันนี้เป็นวันที่<strong>เต็มไปด้วยรัก</strong><br>
-                            ไม่ว่าจะอยู่ที่ไหน ขอให้มีความสุข<br>
-                            และรู้ไว้ว่า... <strong>คุณเป็นคนพิเศษเสมอ</strong> 💕
-                        </p>
-
-                        <!-- ลายเซ็น -->
-                        <p class="card-signature" id="cardSignature" lang="en">With Love ❤️</p>
-
-                        <!-- อีโมจิด้านล่าง -->
-                        <div class="card-emoji-bottom" id="cardEmojiBottom" aria-hidden="true">
-                            <span>🌸</span>
-                            <span>💖</span>
-                            <span>🌸</span>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ปุ่มกลุ่ม -->
+        <!-- ปุ่มควบคุมด้านล่าง -->
         <div class="btn-group">
-
-            <!-- ปุ่มเปิด/ปิดการ์ด -->
-            <button class="btn-valentine" id="btnToggle" aria-label="เปิดการ์ด">
-                <span class="btn-icon" aria-hidden="true">💌</span>
-                <span class="btn-text">เปิดการ์ด</span>
-            </button>
-
-            <!-- ปุ่มสุ่มการ์ดใหม่ -->
-            <button class="btn-valentine btn-shuffle" id="btnShuffle" aria-label="สุ่มการ์ดใหม่">
+            <button class="btn-valentine btn-shuffle" id="btnShuffle" aria-label="สลับและจัดการ์ดใหม่">
                 <span class="btn-icon" aria-hidden="true">🔀</span>
-                <span class="btn-text">สุ่มการ์ดใหม่</span>
+                <span class="btn-text">สับไพ่ / จัดการ์ดใหม่</span>
             </button>
-
         </div>
     </main>
 
+    <!-- หน้าต่าง Modal แสดงผลการเปิดการ์ดแบบ 3D ซูมเข้าหาหน้าจอ -->
+    <div class="modal-overlay" id="cardModal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+        <div class="modal-content">
+            
+            <!-- ปุ่มปิดการ์ดตรงมุมขวาบนของจอภาพ -->
+            <button class="btn-close" id="btnCloseModal" aria-label="ปิดหน้าต่างการ์ด">&times;</button>
+
+            <!-- โครงสร้างการ์ดที่สามารถหมุน 3D Flip ได้ -->
+            <div class="modal-card-wrapper">
+                <div class="modal-card" id="modalCard">
+                    
+                    <!-- ด้านหน้าการ์ด (ซองจดหมายปิดผนึก) -->
+                    <div class="modal-card-front">
+                        <div class="envelope-back-design"></div>
+                        <div class="envelope-flap-top"></div>
+                        
+                        <!-- สติกเกอร์รูปหัวใจสำหรับคลิกเปิด -->
+                        <div class="heart-sticker-modal" id="modalWaxSeal" role="button" aria-label="สติกเกอร์รูปหัวใจ แดงพาสเทล แตะเพื่อเปิดการ์ด" tabindex="0">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M50 84 C50 84, 16 62, 16 40 C16 20, 32 10, 50 28 C68 10, 84 20, 84 40 C84 62, 50 84, 50 84 Z" class="sticker-heart" />
+                            </svg>
+                        </div>
+                        <p class="modal-envelope-label" id="modalEnvelopeLabel" lang="en">For You</p>
+                        <p class="modal-envelope-hint">แตะสติกเกอร์หัวใจเพื่อเปิด 💌</p>
+                    </div>
+
+                    <!-- ด้านหลังการ์ด (จดหมายรักคำทำนายด้านใน) -->
+                    <div class="modal-card-back" id="modalCardBack">
+                        <div class="card-inner">
+                            <!-- อีโมจิด้านบน -->
+                            <div class="card-emoji-top" id="modalCardEmojiTop" aria-hidden="true">🌹</div>
+                            
+                            <!-- หัวข้อการ์ด -->
+                            <h2 class="card-title" id="modalCardTitle" lang="en">Happy Valentine's Day</h2>
+                            
+                            <!-- เส้นคั่นกลาง -->
+                            <div class="card-divider" id="modalCardDivider" aria-hidden="true">💗</div>
+                            
+                            <!-- ข้อความจดหมายรัก -->
+                            <p class="card-message" id="modalCardMessage">
+                                สุขสันต์วันวาเลนไทน์นะ...
+                            </p>
+                            
+                            <!-- ลายเซ็น -->
+                            <p class="card-signature" id="modalCardSignature" lang="en">With Love ❤️</p>
+                            
+                            <!-- อีโมจิด้านล่าง -->
+                            <div class="card-emoji-bottom" id="modalCardEmojiBottom" aria-hidden="true">
+                                <span>🌸</span>
+                                <span>💖</span>
+                                <span>🌸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <div class="sparkle-container" id="sparkleContainer" aria-hidden="true"></div>
+    
     <footer class="page-footer">
         <p>Made with ❤️ — Valentine's Day 2026</p>
         <p class="footer-hearts" aria-hidden="true">♥ ♥ ♥ ♥ ♥</p>
