@@ -392,9 +392,12 @@ const paperStyles = ['paper-kraft', 'paper-grid', 'paper-lined', 'paper-white'];
 const fasteners = ['fastener-tape', 'fastener-pin', 'fastener-clip'];
 
 function renderCardGrid() {
-    cardGrid.innerHTML = '';
+    // เลือกโครงสร้างการ์ดเปล่าทั้ง 20 ใบที่เตรียมไว้ล่วงหน้าใน HTML
+    const cards = cardGrid.querySelectorAll('.grid-card');
+    
     activeDeck.forEach((card, index) => {
-        const cardElement = document.createElement('div');
+        const cardElement = cards[index];
+        if (!cardElement) return;
         
         // กำหนดลวดลายกระดาษและตัวยึดตามลำดับสลับกันอย่างสวยงาม
         const paperClass = paperStyles[index % paperStyles.length];
@@ -413,16 +416,14 @@ function renderCardGrid() {
             <div class="grid-card-hint">และส่งต่อเลย &gt;</div>
         `;
 
-        // Event listener สำหรับการเปิดดูการ์ด
-        cardElement.addEventListener('click', () => openModal(index));
-        cardElement.addEventListener('keydown', (e) => {
+        // ตั้งค่า Event Handlers (ใช้ onclick เพื่อเคลียร์ของเดิมทุกครั้งหลังสับไพ่)
+        cardElement.onclick = () => openModal(index);
+        cardElement.onkeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 openModal(index);
             }
-        });
-
-        cardGrid.appendChild(cardElement);
+        };
     });
 }
 

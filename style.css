@@ -6,7 +6,7 @@
 :root {
     --bg-board: #e8dfd3;
     --text-cocoa: #4a3325;
-    --text-light: #7c6250;
+    --text-light: #5d4637;
     --pink-milk: #ffccd5;
     --pink-soft: #ffb3c1;
     --pink-hot: #ff758f;
@@ -378,7 +378,6 @@ body::before {
     font-weight: 700;
     color: var(--text-light);
     margin-top: 0.4rem;
-    opacity: 0.8;
 }
 
 /* =====================================================
