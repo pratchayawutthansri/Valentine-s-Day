@@ -1067,3 +1067,379 @@ body::before {
         height: 66px;
     }
 }
+
+/* =====================================================
+   Category Navigation Tabs
+   ===================================================== */
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0.8rem auto 0.2rem auto;
+    z-index: 10;
+    position: relative;
+    flex-wrap: wrap;
+    max-width: 600px;
+    width: 100%;
+    padding: 0 1rem;
+    animation: fadeInDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.25) both;
+}
+
+.tab-btn {
+    padding: 0.5rem 1.2rem;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-cocoa);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(74, 51, 37, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(74, 51, 37, 0.03);
+    transition: var(--transition-cute);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tab-btn:hover {
+    transform: translateY(-2px);
+    background: var(--white);
+    border-color: var(--pink-soft);
+    box-shadow: 0 6px 12px rgba(255, 117, 143, 0.1);
+}
+
+.tab-btn.active {
+    background: var(--gradient-btn);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 6px 12px rgba(255, 117, 143, 0.25);
+}
+
+/* =====================================================
+   Floating Music Player (Spinning Vinyl)
+   ===================================================== */
+.music-player {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 90;
+    animation: fadeInUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.25) both;
+}
+
+.btn-music-toggle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid rgba(74, 51, 37, 0.15);
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-cute);
+    padding: 0;
+    overflow: visible;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-music-toggle:hover {
+    transform: scale(1.08);
+    border-color: var(--pink-soft);
+    box-shadow: 0 8px 20px rgba(255, 117, 143, 0.15);
+}
+
+.btn-music-toggle:active {
+    transform: scale(0.94);
+}
+
+.vinyl-disc {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: transform 0.4s ease;
+}
+
+/* Animation for spinning record when active */
+.btn-music-toggle.playing .vinyl-disc {
+    animation: spinRecord 4s linear infinite;
+}
+
+@keyframes spinRecord {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.music-notes {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 1.1rem;
+    background: var(--pink-hot);
+    color: var(--white);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(255, 117, 143, 0.3);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.btn-music-toggle.playing .music-notes {
+    opacity: 1;
+    animation: noteBounce 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes noteBounce {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translate3d(0, -4px, 0) scale(1.15) rotate(10deg); }
+}
+
+/* =====================================================
+   Customizer Modal (Wood Clipboard Design)
+   ===================================================== */
+.clipboard-container {
+    width: 100%;
+    max-width: 440px;
+    background: #b89775; /* warm wood clipboard */
+    border: 4px solid #8e6f50;
+    border-radius: 20px;
+    padding: 26px 16px 16px 16px;
+    position: relative;
+    box-shadow: 0 30px 70px rgba(74, 51, 37, 0.35);
+    animation: clipboardSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25) both;
+}
+
+@keyframes clipboardSlideIn {
+    0% { transform: translate3d(0, 40px, 0) scale(0.9); opacity: 0; }
+    100% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+}
+
+.clipboard-top-clip {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 24px;
+    background: #7d7d7d;
+    border-radius: 6px 6px 0 0;
+    border: 2px solid #5c5c5c;
+    border-bottom: none;
+    z-index: 10;
+}
+
+.clipboard-top-clip::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 12px;
+    background: #8f8f8f;
+    border: 2px solid #5c5c5c;
+    border-radius: 4px;
+}
+
+.clipboard-paper {
+    background: var(--bg-white);
+    border-radius: 12px;
+    padding: 1.5rem 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-height: 520px;
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.form-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-cocoa);
+    text-align: center;
+    margin-bottom: 1.2rem;
+    border-bottom: 2px dashed var(--pink-milk);
+    padding-bottom: 0.6rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group textarea {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid rgba(74, 51, 37, 0.2);
+    border-radius: 10px;
+    background: rgba(253, 250, 246, 0.5);
+    color: var(--text-cocoa);
+    outline: none;
+    transition: var(--transition-cute);
+    width: 100%;
+}
+
+.form-group select:focus,
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: var(--pink-soft);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(255, 179, 193, 0.2);
+}
+
+.form-radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.radio-label {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.radio-label input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 1px solid rgba(74, 51, 37, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    background: rgba(253, 250, 246, 0.5);
+    color: var(--text-cocoa);
+    transition: var(--transition-cute);
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom {
+    background: var(--pink-milk);
+    border-color: var(--pink-hot);
+    color: var(--text-cocoa);
+    transform: scale(1.02);
+    box-shadow: 0 3px 8px rgba(255, 117, 143, 0.15);
+}
+
+/* Specific radio textures preview */
+.radio-custom.paper-kraft { background: var(--bg-kraft); }
+.radio-custom.paper-grid { 
+    background: var(--bg-grid);
+    background-image: linear-gradient(rgba(255, 204, 213, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 204, 213, 0.2) 1px, transparent 1px);
+    background-size: 10px 10px;
+}
+.radio-custom.paper-lined { 
+    background: var(--bg-lined);
+    background-image: linear-gradient(rgba(173, 216, 230, 0.25) 1px, transparent 1px);
+    background-size: 100% 12px;
+}
+.radio-custom.paper-white { background: var(--bg-white); }
+
+.btn-generate {
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+    box-shadow: 0 6px 0 rgba(255, 117, 143, 0.2);
+}
+
+/* Button Create Custom (Sweet Peach Style) */
+.btn-create-custom {
+    background: linear-gradient(135deg, #ffd29d 0%, #ff8b94 100%);
+    box-shadow: 0 8px 0 rgba(255, 139, 148, 0.25);
+}
+
+.btn-create-custom:hover {
+    box-shadow: 0 12px 0 rgba(255, 139, 148, 0.15);
+}
+
+.btn-create-custom:active {
+    box-shadow: 0 2px 0 rgba(255, 139, 148, 0.2);
+}
+
+/* Close button customizer */
+#btnCloseCustomizer {
+    color: #8e6f50;
+    border-color: #a88d73;
+}
+
+#btnCloseCustomizer:hover {
+    border-color: #8e6f50;
+    color: var(--text-cocoa);
+}
+
+/* Adjustments for double buttons wrap */
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    z-index: 10;
+    position: relative;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+@media (max-width: 580px) {
+    .category-tabs {
+        gap: 0.5rem;
+    }
+    .tab-btn {
+        padding: 0.4rem 0.9rem;
+        font-size: 0.8rem;
+        border-radius: 10px;
+    }
+    .music-player {
+        bottom: 15px;
+        right: 15px;
+    }
+    .btn-music-toggle {
+        width: 46px;
+        height: 46px;
+    }
+    .music-notes {
+        font-size: 0.95rem;
+        width: 18px;
+        height: 18px;
+        top: -4px;
+        right: -4px;
+    }
+    .clipboard-container {
+        padding: 20px 10px 10px 10px;
+    }
+    .clipboard-paper {
+        padding: 1.2rem 0.8rem;
+    }
+    .form-title {
+        font-size: 1.35rem;
+    }
+}

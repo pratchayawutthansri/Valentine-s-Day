@@ -43,6 +43,14 @@
         <p class="subtitle">เลือกการ์ดที่ใช่ ส่งให้คนที่ชอบ 💌</p>
     </header>
 
+    <!-- แท็บหมวดหมู่ตัวกรองการ์ดรัก -->
+    <nav class="category-tabs" aria-label="คัดกรองการ์ดรัก">
+        <button class="tab-btn active" data-category="all">ทั้งหมด 💌</button>
+        <button class="tab-btn" data-category="romantic">หวานซึ้ง 💖</button>
+        <button class="tab-btn" data-category="cute">ขี้อ้อน 🧸</button>
+        <button class="tab-btn" data-category="fortune">คำทำนาย 🥠</button>
+    </nav>
+
     <main class="card-container">
 
         <!-- Grid สำหรับแสดงสำรับการ์ดทั้ง 20 ใบ -->
@@ -75,6 +83,10 @@
             <button class="btn-valentine btn-shuffle" id="btnShuffle" aria-label="สลับและจัดการ์ดใหม่">
                 <span class="btn-icon" aria-hidden="true">🔀</span>
                 <span class="btn-text">สับไพ่ / จัดการ์ดใหม่</span>
+            </button>
+            <button class="btn-valentine btn-create-custom" id="btnCreateCustom" aria-label="สร้างการ์ดเขียนมือด้วยตัวเอง">
+                <span class="btn-icon" aria-hidden="true">✍️</span>
+                <span class="btn-text">เขียนการ์ดใหม่ของคุณเอง</span>
             </button>
         </div>
     </main>
@@ -143,6 +155,124 @@
             </div>
 
         </div>
+    </div>
+
+    <!-- หน้าต่างเขียนการ์ดรักใบใหม่ (Customizer Modal) -->
+    <div class="modal-overlay" id="customizerModal" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+        <div class="modal-content">
+            <button class="btn-close" id="btnCloseCustomizer" aria-label="ปิดหน้าต่างเขียนการ์ด">&times;</button>
+            
+            <div class="clipboard-container">
+                <div class="clipboard-top-clip"></div>
+                <div class="clipboard-paper">
+                    <h2 class="form-title">✍️ เขียนการ์ดรักทำมือ</h2>
+                    
+                    <form id="customCardForm">
+                        <!-- 1. Emoji Selection -->
+                        <div class="form-group">
+                            <label for="inputEmoji">1. เลือกไอคอนหน้าซอง 🧸</label>
+                            <select id="inputEmoji" required>
+                                <option value="💌">💌 จดหมายรัก</option>
+                                <option value="🧸">🧸 ตุ๊กตาหมี</option>
+                                <option value="🍫">🍫 ช็อกโกแลต</option>
+                                <option value="🌻">🌻 ทานตะวัน</option>
+                                <option value="🐱">🐱 แมวเหมียว</option>
+                                <option value="🍯">🍯 น้ำผึ้งแสนหวาน</option>
+                                <option value="🍒">🍒 เชอร์รี่แดง</option>
+                                <option value="🌙">🌙 ดวงจันทร์</option>
+                                <option value="🐰">🐰 กระต่ายน้อย</option>
+                                <option value="☕">☕ แก้วกาแฟ</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Paper Selection -->
+                        <div class="form-group">
+                            <label>2. เลือกสไตล์กระดาษเขียน</label>
+                            <div class="form-radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="inputPaper" value="paper-kraft" checked>
+                                    <span class="radio-custom paper-kraft">คราฟต์</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="inputPaper" value="paper-grid">
+                                    <span class="radio-custom paper-grid">ตาราง</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="inputPaper" value="paper-lined">
+                                    <span class="radio-custom paper-lined">สมุดจด</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="inputPaper" value="paper-white">
+                                    <span class="radio-custom paper-white">การ์ดขาว</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 3. Fastener Selection -->
+                        <div class="form-group">
+                            <label>3. เลือกตัวแปะยึดซอง</label>
+                            <div class="form-radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="inputFastener" value="fastener-tape" checked>
+                                    <span class="radio-custom">เทปกาว</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="inputFastener" value="fastener-pin">
+                                    <span class="radio-custom">หมุดปัก</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="inputFastener" value="fastener-clip">
+                                    <span class="radio-custom">คลิปหนีบ</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 4. Text Inputs -->
+                        <div class="form-group">
+                            <label for="inputLabel">4. ชื่อหัวข้อหน้าซอง (ภาษาอังกฤษสั้นๆ)</label>
+                            <input type="text" id="inputLabel" placeholder="เช่น For You, My Love" maxlength="12" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputTitle">5. หัวข้อจดหมายด้านใน</label>
+                            <input type="text" id="inputTitle" placeholder="เช่น Happy Valentine's Day" maxlength="30" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputMessage">6. ข้อความซึ้งๆ บอกรัก (เคาะบรรทัดได้ค่ะ)</label>
+                            <textarea id="inputMessage" rows="4" placeholder="เขียนความรู้สึกดีๆ บอกกับเขาที่นี่เลย..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputSignature">7. ลายเซ็นลงท้าย</label>
+                            <input type="text" id="inputSignature" placeholder="เช่น With Love, Yours Forever" maxlength="25" required>
+                        </div>
+
+                        <button type="submit" class="btn-valentine btn-generate">
+                            <span class="btn-text">สร้างการ์ด & คัดลอกลิงก์แชร์ 💖</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- เครื่องเล่นเพลง Lofi วินเทจลอยมุมขวาของจอ -->
+    <div class="music-player" id="musicPlayer" role="region" aria-label="เครื่องเล่นเพลงประกอบ">
+        <button class="btn-music-toggle" id="btnMusicToggle" aria-label="เปิด/ปิดเพลงประกอบ" aria-pressed="false">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="vinyl-disc">
+                <circle cx="50" cy="50" r="46" fill="#111" />
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#222" stroke-width="2" />
+                <circle cx="50" cy="50" r="30" fill="none" stroke="#222" stroke-width="2" />
+                <circle cx="50" cy="50" r="22" fill="none" stroke="#222" stroke-width="2" />
+                <circle cx="50" cy="50" r="14" fill="#ff758f" />
+                <circle cx="50" cy="50" r="3" fill="#fff" />
+            </svg>
+            <span class="music-notes" aria-hidden="true">🎵</span>
+        </button>
+        <audio id="bgmAudio" loop preload="none">
+            <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-walk-276.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <div class="sparkle-container" id="sparkleContainer" aria-hidden="true"></div>

@@ -337,9 +337,18 @@ const cardCollection = [
     }
 ];
 
-// กำหนด ID ถาวรให้กับการ์ดแต่ละใบสำหรับการแชร์ส่งต่อ (Share Link)
+// หมวดหมู่การ์ดรักสำหรับจัดกลุ่มแท็บ
+const categoryMap = {
+    1: 'romantic', 2: 'cute', 3: 'cute', 4: 'romantic', 5: 'romantic',
+    6: 'cute', 7: 'romantic', 8: 'cute', 9: 'romantic', 10: 'romantic',
+    11: 'romantic', 12: 'cute', 13: 'cute', 14: 'fortune', 15: 'romantic',
+    16: 'cute', 17: 'cute', 18: 'cute', 19: 'romantic', 20: 'fortune'
+};
+
+// กำหนด ID ถาวรและหมวดหมู่ให้กับการ์ดแต่ละใบสำหรับการทำงาน
 cardCollection.forEach((card, index) => {
     card.originalId = index + 1;
+    card.category = categoryMap[index + 1] || 'romantic';
 });
 
 // สำเนาของกองการ์ดสำหรับสลับลำดับ
@@ -370,9 +379,28 @@ const elModalCardMessage = document.getElementById('modalCardMessage');
 const elModalCardSignature = document.getElementById('modalCardSignature');
 const elModalCardEmojiBtm = document.getElementById('modalCardEmojiBottom');
 
+// Customizer Elements
+const btnCreateCustom = document.getElementById('btnCreateCustom');
+const customizerModal = document.getElementById('customizerModal');
+const btnCloseCustomizer = document.getElementById('btnCloseCustomizer');
+const customCardForm = document.getElementById('customCardForm');
+const inputEmoji = document.getElementById('inputEmoji');
+const inputLabel = document.getElementById('inputLabel');
+const inputTitle = document.getElementById('inputTitle');
+const inputMessage = document.getElementById('inputMessage');
+const inputSignature = document.getElementById('inputSignature');
+
+// Music Player Elements
+const btnMusicToggle = document.getElementById('btnMusicToggle');
+const bgmAudio = document.getElementById('bgmAudio');
+
+// State Variables
 let isFlipped = false;       // สถานะการพลิกการ์ดใน Modal
 let isAnimating = false;    // ล็อคเพื่อป้องกันคลิกซ้อน (Debounce)
 let activeCardId = null;    // เก็บ ID ของการ์ดที่กำลังเปิดอยู่เพื่อทำลิงก์แชร์
+let activeCustomCardB64 = null; // เก็บข้อมูลการ์ดกำหนดเองสำหรับการแชร์ต่อ
+let activeCategory = 'all'; // เก็บแท็บหมวดหมู่ปัจจุบันที่คัดเลือกอยู่
+let isMusicPlaying = false; // สถานะเครื่องเล่นเพลงประกอบ
 
 // =====================================================
 // ฟังก์ชันสลับลำดับการ์ด (Fisher-Yates Shuffle)
@@ -385,23 +413,35 @@ function shuffleDeckData() {
 }
 
 // =====================================================
-// =====================================================
 // การแสดงผลสำรับการ์ดบนตาราง (Grid)
 // =====================================================
 const paperStyles = ['paper-kraft', 'paper-grid', 'paper-lined', 'paper-white'];
 const fasteners = ['fastener-tape', 'fastener-pin', 'fastener-clip'];
 
 function renderCardGrid() {
-    // เลือกโครงสร้างการ์ดเปล่าทั้ง 20 ใบที่เตรียมไว้ล่วงหน้าใน HTML
+    // กรองการ์ดตามหมวดหมู่ที่เลือก
+    const filteredDeck = activeDeck.filter(card => activeCategory === 'all' || card.category === activeCategory);
+    
+    // ดึงโครงสร้างซองจดหมายการ์ดเปล่าทั้ง 20 ใบจาก HTML
     const cards = cardGrid.querySelectorAll('.grid-card');
     
-    activeDeck.forEach((card, index) => {
+    // ซ่อนโครงสร้างการ์ดส่วนเกินที่ไม่ได้ระบุข้อมูลในฟิลเตอร์ปัจจุบัน
+    cards.forEach(c => {
+        c.style.display = 'none';
+        c.onclick = null;
+        c.onkeydown = null;
+    });
+
+    filteredDeck.forEach((card, index) => {
         const cardElement = cards[index];
         if (!cardElement) return;
         
-        // กำหนดลวดลายกระดาษและตัวยึดตามลำดับสลับกันอย่างสวยงาม
-        const paperClass = paperStyles[index % paperStyles.length];
-        const fastenerClass = fasteners[index % fasteners.length];
+        cardElement.style.display = 'flex';
+
+        // ตั้งค่ารูปแบบกระดาษและตัวยึดให้ยึดโยงถาวรกับ originalId (เพื่อไม่ให้ลวดลายสลับมั่วเวลาเปลี่ยนแท็บ)
+        const styleIndex = card.originalId ? card.originalId : index;
+        const paperClass = card.paperStyle ? card.paperStyle : paperStyles[styleIndex % paperStyles.length];
+        const fastenerClass = card.fastenerStyle ? card.fastenerStyle : fasteners[styleIndex % fasteners.length];
         
         cardElement.className = `grid-card ${paperClass}`;
         cardElement.setAttribute('role', 'button');
@@ -416,12 +456,12 @@ function renderCardGrid() {
             <div class="grid-card-hint">และส่งต่อเลย &gt;</div>
         `;
 
-        // ตั้งค่า Event Handlers (ใช้ onclick เพื่อเคลียร์ของเดิมทุกครั้งหลังสับไพ่)
-        cardElement.onclick = () => openModal(index);
+        // ตั้งค่า Event Handlers (ใช้ onclick เพื่อเคลียร์ข้อมูลเดิมทุกครั้ง)
+        cardElement.onclick = () => openModalByCard(card);
         cardElement.onkeydown = (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                openModal(index);
+                openModalByCard(card);
             }
         };
     });
@@ -430,12 +470,18 @@ function renderCardGrid() {
 // =====================================================
 // โหมด Modal: เปิด/ปิดการ์ดความรัก
 // =====================================================
-function openModal(index) {
+function openModalByCard(card) {
     if (isAnimating) return;
     isAnimating = true;
 
-    const card = activeDeck[index];
-    activeCardId = card.originalId; // บันทึก ID ของการ์ดใบที่เปิด
+    // บันทึก ID หรือ Base64 สำหรับจัดแชร์ส่งต่อตามประเภทการ์ด
+    if (card.isCustom) {
+        activeCardId = null;
+        activeCustomCardB64 = encodeCardData(card);
+    } else {
+        activeCardId = card.originalId;
+        activeCustomCardB64 = null;
+    }
 
     // 1. อัปเดตข้อมูลการ์ดลงในฟอร์ม Modal
     elModalEnvelopeLabel.textContent = card.envelopeLabel;
@@ -455,7 +501,9 @@ function openModal(index) {
     }
 
     // ตั้งค่าลวดลายกระดาษด้านในให้ตรงกับการ์ดที่กดเลือก
-    const paperClass = paperStyles[index % paperStyles.length];
+    const styleIndex = card.originalId ? card.originalId : 99;
+    const paperClass = card.paperStyle ? card.paperStyle : paperStyles[styleIndex % paperStyles.length];
+    
     modalCardBack.className = 'modal-card-back';
     modalCardBack.classList.add(paperClass);
 
@@ -543,15 +591,14 @@ function shuffleDeck() {
 }
 
 // =====================================================
-// เอฟเฟกต์: ฟองสบู่สะท้อนแสงและหัวใจพาสเทลลอยพื้นหลัง (คุมปริมาณเพื่อไม่ให้เครื่องแล็ก)
+// เอฟเฟกต์: ฟองสบู่สะท้อนแสงและหัวใจพาสเทลลอยพื้นหลัง
 // =====================================================
 function createAmbientParticles() {
-    // 1. สร้างฟองสบู่พาสเทล 4 ลูก (ลดจำนวนจาก 6 ลูก)
     for (let i = 0; i < 4; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'floating-bubble';
         bubble.setAttribute('aria-hidden', 'true');
-        const size = Math.random() * 20 + 12; // 12px ถึง 32px
+        const size = Math.random() * 20 + 12;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         bubble.style.left = Math.random() * 100 + '%';
@@ -560,7 +607,6 @@ function createAmbientParticles() {
         bgHearts.appendChild(bubble);
     }
 
-    // 2. สร้างหัวใจมินิมอล 4 ดวง (ลดจำนวนจาก 6 ดวง)
     for (let i = 0; i < 4; i++) {
         const heart = document.createElement('div');
         heart.className = 'floating-heart';
@@ -607,12 +653,11 @@ function createSparkles() {
 // เอฟเฟกต์: ฟองสบู่และหัวใจลอยพุ่งขึ้นมาจากขอบการ์ดเมื่อเปิดเผย (GPU-Accelerated)
 // =====================================================
 function createConfettiHearts() {
-    const count = 8; // ลดจาก 12
+    const count = 8;
     const rect = modalCard.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2 + window.scrollX;
     const centerY = rect.top + rect.height / 2 + window.scrollY;
 
-    // 1. ฟองสบู่พุ่งขึ้น
     for (let i = 0; i < count; i++) {
         const bubble = document.createElement('div');
         bubble.className = 'floating-bubble';
@@ -631,8 +676,7 @@ function createConfettiHearts() {
         setTimeout(() => bubble.remove(), 1800);
     }
 
-    // 2. หัวใจลอยพุ่งขึ้น
-    for (let i = 0; i < 5; i++) { // ลดจาก 8
+    for (let i = 0; i < 5; i++) {
         const heart = document.createElement('div');
         heart.className = 'floating-heart';
         heart.setAttribute('aria-hidden', 'true');
@@ -666,15 +710,43 @@ revealStyles.innerHTML = `
 document.head.appendChild(revealStyles);
 
 // =====================================================
+// ฟังก์ชันเข้ารหัส/ถอดรหัสข้อความสำหรับลิงก์แชร์การ์ดคัสตอม (Base64 UTF-8)
+// =====================================================
+function encodeCardData(card) {
+    try {
+        const jsonStr = JSON.stringify(card);
+        // ใช้ encodeURIComponent + unescape เพื่อไม่ให้ภาษาไทยใน Base64 เสียหาย
+        return btoa(unescape(encodeURIComponent(jsonStr)));
+    } catch (e) {
+        console.error("Failed to encode card: ", e);
+        return null;
+    }
+}
+
+function decodeCardData(base64Str) {
+    try {
+        const jsonStr = decodeURIComponent(escape(atob(base64Str)));
+        return JSON.parse(jsonStr);
+    } catch (e) {
+        console.error("Failed to decode card: ", e);
+        return null;
+    }
+}
+
+// =====================================================
 // ฟังก์ชันคัดลอกลิงก์แชร์การ์ดความรัก (Share Link)
 // =====================================================
 function handleShareClick() {
-    if (!activeCardId) return;
+    let shareUrl = '';
     
-    // สร้าง URL ที่ระบุ ID ของการ์ดใบนี้
-    const shareUrl = `${window.location.origin}${window.location.pathname}?card=${activeCardId}`;
+    if (activeCustomCardB64) {
+        shareUrl = `${window.location.origin}${window.location.pathname}?custom=${activeCustomCardB64}`;
+    } else if (activeCardId) {
+        shareUrl = `${window.location.origin}${window.location.pathname}?card=${activeCardId}`;
+    } else {
+        return;
+    }
     
-    // บันทึกลิงก์เข้าสู่คลิปบอร์ด
     navigator.clipboard.writeText(shareUrl).then(() => {
         const shareTextEl = btnShareCard.querySelector('.share-btn-text');
         if (shareTextEl) {
@@ -682,8 +754,8 @@ function handleShareClick() {
         }
     }).catch(err => {
         console.error('Failed to copy share link: ', err);
-        // แสดงทางเลือกหากคัดลอกไม่ได้
-        alert(`คัดลอกลิงก์นี้เพื่อส่งให้เพื่อนได้เลยค่ะ:\n${shareUrl}`);
+        alert(`คัดลอกลิงก์นี้เพื่อส่งให้เพื่อนได้เลยค่ะ:
+${shareUrl}`);
     });
 }
 
@@ -691,18 +763,69 @@ function handleShareClick() {
 function checkSharedCard() {
     const urlParams = new URLSearchParams(window.location.search);
     const cardParam = urlParams.get('card');
-    if (cardParam) {
+    const customParam = urlParams.get('custom');
+    
+    // 1. กรณีเปิดด้วยการ์ดกำหนดเอง (Custom Card Link)
+    if (customParam) {
+        const decodedCard = decodeCardData(customParam);
+        if (decodedCard) {
+            // มาร์กให้เป็นการ์ดพิเศษ
+            decodedCard.originalId = 99; 
+            
+            // นำการ์ดพิเศษมาต่อหน้าแถวสุดของสำรับบอร์ด
+            activeDeck.unshift(decodedCard);
+            renderCardGrid();
+            
+            setTimeout(() => {
+                openModalByCard(decodedCard);
+            }, 600);
+        }
+    } 
+    // 2. กรณีเปิดด้วยการ์ดมาตรฐาน (Standard Card Link)
+    else if (cardParam) {
         const targetId = parseInt(cardParam, 10);
-        
-        // ค้นหาตำแหน่งการ์ดใน Active Deck ที่มี ID ถาวรตรงกัน
         const deckIndex = activeDeck.findIndex(c => c.originalId === targetId);
         if (deckIndex !== -1) {
-            // ดีเลย์เล็กน้อยเพื่อให้ทรัพยากรหน้าเว็บพร้อมก่อนเปิดแสดง Modal
             setTimeout(() => {
-                openModal(deckIndex);
+                openModalByCard(activeDeck[deckIndex]);
             }, 600);
         }
     }
+}
+
+// =====================================================
+// ฟังก์ชันเครื่องเล่นเพลง (Music Player Controllers)
+// =====================================================
+function toggleMusic() {
+    if (isMusicPlaying) {
+        bgmAudio.pause();
+        btnMusicToggle.classList.remove('playing');
+        btnMusicToggle.setAttribute('aria-pressed', 'false');
+        isMusicPlaying = false;
+    } else {
+        bgmAudio.play().then(() => {
+            btnMusicToggle.classList.add('playing');
+            btnMusicToggle.setAttribute('aria-pressed', 'true');
+            isMusicPlaying = true;
+        }).catch(err => {
+            console.error("Audio play blocked by browser: ", err);
+        });
+    }
+}
+
+// =====================================================
+// หน้าต่างเขียนการ์ดกำหนดเอง (Customizer Modal Controllers)
+// =====================================================
+function openCustomizer() {
+    if (isAnimating) return;
+    customizerModal.classList.add('active');
+    customizerModal.setAttribute('aria-hidden', 'false');
+    customizerModal.focus();
+}
+
+function closeCustomizer() {
+    customizerModal.classList.remove('active');
+    customizerModal.setAttribute('aria-hidden', 'true');
 }
 
 // =====================================================
@@ -744,8 +867,77 @@ cardModal.addEventListener('click', (e) => {
 
 // ปิดด้วยปุ่ม Escape บนคีย์บอร์ด
 window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && cardModal.classList.contains('active')) {
-        closeModal();
+    if (e.key === 'Escape') {
+        if (cardModal.classList.contains('active')) {
+            closeModal();
+        }
+        if (customizerModal.classList.contains('active')) {
+            closeCustomizer();
+        }
+    }
+});
+
+// แท็บหมวดหมู่การ์ดรัก
+const tabButtons = document.querySelectorAll('.tab-btn');
+tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (isAnimating) return;
+        
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        activeCategory = btn.dataset.category;
+        renderCardGrid();
+    });
+});
+
+// เครื่องเล่นเพลงประกอบ
+btnMusicToggle.addEventListener('click', toggleMusic);
+
+// เปิด/ปิดหน้าต่างเขียนการ์ดเอง
+btnCreateCustom.addEventListener('click', openCustomizer);
+btnCloseCustomizer.addEventListener('click', closeCustomizer);
+
+customizerModal.addEventListener('click', (e) => {
+    if (e.target === customizerModal) {
+        closeCustomizer();
+    }
+});
+
+// จัดการส่งฟอร์มเขียนการ์ดกำหนดเอง
+customCardForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const selectedPaper = document.querySelector('input[name="inputPaper"]:checked').value;
+    const selectedFastener = document.querySelector('input[name="inputFastener"]:checked').value;
+
+    // สร้างข้อมูลการ์ดใหม่
+    const newCard = {
+        isCustom: true,
+        envelopeEmoji: inputEmoji.value,
+        envelopeLabel: inputLabel.value,
+        emojiTop: inputEmoji.value,
+        title: inputTitle.value,
+        divider: '💗',
+        message: inputMessage.value.replace(/\n/g, '<br>'), // รักษาระยะเคาะบรรทัด
+        signature: inputSignature.value,
+        emojiBottom: [inputEmoji.value, '💖', inputEmoji.value],
+        paperStyle: selectedPaper,
+        fastenerStyle: selectedFastener
+    };
+
+    const b64 = encodeCardData(newCard);
+    if (b64) {
+        const shareUrl = `${window.location.origin}${window.location.pathname}?custom=${b64}`;
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert("สร้างการ์ดของคุณสำเร็จ! 💖 และคัดลอกลิงก์สำหรับส่งต่อลงคลิปบอร์ดแล้วค่ะ ส่งลิงก์นี้ให้คนพิเศษของคุณเปิดอ่านได้เลย!");
+            closeCustomizer();
+            customCardForm.reset();
+        }).catch(err => {
+            console.error("Failed to copy link: ", err);
+            prompt("ระบบสร้างลิงก์การ์ดเสร็จแล้ว คัดลอกลิงก์ด้านล่างเพื่อส่งต่อได้เลยค่ะ:", shareUrl);
+        });
     }
 });
 
