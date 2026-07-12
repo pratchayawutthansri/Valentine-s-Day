@@ -871,7 +871,7 @@ window.addEventListener('keydown', (e) => {
         if (cardModal.classList.contains('active')) {
             closeModal();
         }
-        if (customizerModal.classList.contains('active')) {
+        if (customizerModal && customizerModal.classList.contains('active')) {
             closeCustomizer();
         }
     }
@@ -895,51 +895,55 @@ tabButtons.forEach(btn => {
 btnMusicToggle.addEventListener('click', toggleMusic);
 
 // เปิด/ปิดหน้าต่างเขียนการ์ดเอง
-btnCreateCustom.addEventListener('click', openCustomizer);
-btnCloseCustomizer.addEventListener('click', closeCustomizer);
+if (btnCreateCustom) btnCreateCustom.addEventListener('click', openCustomizer);
+if (btnCloseCustomizer) btnCloseCustomizer.addEventListener('click', closeCustomizer);
 
-customizerModal.addEventListener('click', (e) => {
-    if (e.target === customizerModal) {
-        closeCustomizer();
-    }
-});
+if (customizerModal) {
+    customizerModal.addEventListener('click', (e) => {
+        if (e.target === customizerModal) {
+            closeCustomizer();
+        }
+    });
+}
 
 // จัดการส่งฟอร์มเขียนการ์ดกำหนดเอง
-customCardForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+if (customCardForm) {
+    customCardForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    const selectedPaper = document.querySelector('input[name="inputPaper"]:checked').value;
-    const selectedFastener = document.querySelector('input[name="inputFastener"]:checked').value;
+        const selectedPaper = document.querySelector('input[name="inputPaper"]:checked').value;
+        const selectedFastener = document.querySelector('input[name="inputFastener"]:checked').value;
 
-    // สร้างข้อมูลการ์ดใหม่
-    const newCard = {
-        isCustom: true,
-        envelopeEmoji: inputEmoji.value,
-        envelopeLabel: inputLabel.value,
-        emojiTop: inputEmoji.value,
-        title: inputTitle.value,
-        divider: '💗',
-        message: inputMessage.value.replace(/\n/g, '<br>'), // รักษาระยะเคาะบรรทัด
-        signature: inputSignature.value,
-        emojiBottom: [inputEmoji.value, '💖', inputEmoji.value],
-        paperStyle: selectedPaper,
-        fastenerStyle: selectedFastener
-    };
+        // สร้างข้อมูลการ์ดใหม่
+        const newCard = {
+            isCustom: true,
+            envelopeEmoji: inputEmoji.value,
+            envelopeLabel: inputLabel.value,
+            emojiTop: inputEmoji.value,
+            title: inputTitle.value,
+            divider: '💗',
+            message: inputMessage.value.replace(/\n/g, '<br>'), // รักษาระยะเคาะบรรทัด
+            signature: inputSignature.value,
+            emojiBottom: [inputEmoji.value, '💖', inputEmoji.value],
+            paperStyle: selectedPaper,
+            fastenerStyle: selectedFastener
+        };
 
-    const b64 = encodeCardData(newCard);
-    if (b64) {
-        const shareUrl = `${window.location.origin}${window.location.pathname}?custom=${b64}`;
-        
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert("สร้างการ์ดของคุณสำเร็จ! 💖 และคัดลอกลิงก์สำหรับส่งต่อลงคลิปบอร์ดแล้วค่ะ ส่งลิงก์นี้ให้คนพิเศษของคุณเปิดอ่านได้เลย!");
-            closeCustomizer();
-            customCardForm.reset();
-        }).catch(err => {
-            console.error("Failed to copy link: ", err);
-            prompt("ระบบสร้างลิงก์การ์ดเสร็จแล้ว คัดลอกลิงก์ด้านล่างเพื่อส่งต่อได้เลยค่ะ:", shareUrl);
-        });
-    }
-});
+        const b64 = encodeCardData(newCard);
+        if (b64) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?custom=${b64}`;
+            
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert("สร้างการ์ดของคุณสำเร็จ! 💖 และคัดลอกลิงก์สำหรับส่งต่อลงคลิปบอร์ดแล้วค่ะ ส่งลิงก์นี้ให้คนพิเศษของคุณเปิดอ่านได้เลย!");
+                closeCustomizer();
+                customCardForm.reset();
+            }).catch(err => {
+                console.error("Failed to copy link: ", err);
+                prompt("ระบบสร้างลิงก์การ์ดเสร็จแล้ว คัดลอกลิงก์ด้านล่างเพื่อส่งต่อได้เลยค่ะ:", shareUrl);
+            });
+        }
+    });
+}
 
 // สับไพ่
 btnShuffle.addEventListener('click', shuffleDeck);
